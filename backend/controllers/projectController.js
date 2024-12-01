@@ -1,29 +1,42 @@
-const Project = require('../models/project.js');
+const Project = require('../models/projectModel');
 
-// Create new project
-const createProject = async (req, res) => {
-  const { name, dueDate, status } = req.body;
-
+// Create Project
+exports.createProject = async (req, res) => {
   try {
-    const newProject = new Project({ name, dueDate, status, userId: req.userId });
+    const newProject = new Project(req.body);
     await newProject.save();
     res.status(201).json(newProject);
-  } catch (error) {
-    res.status(400).json({ message: 'Error creating project', error });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
 };
 
-// Get all projects for authenticated user
-const getProjects = async (req, res) => {
+// Get All Projects
+exports.getAllProjects = async (req, res) => {
   try {
-    const projects = await Project.find({ userId: req.userId });
-    res.json(projects);
-  } catch (error) {
-    res.status(400).json({ message: 'Error fetching projects', error });
+    const projects = await Project.find();
+    res.status(200).json(projects);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
 };
 
-module.exports = {
-  createProject,
-  getProjects,
+// Update Project
+exports.updateProject = async (req, res) => {
+  try {
+    const updatedProject = await Project.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.status(200).json(updatedProject);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
+// Delete Project
+exports.deleteProject = async (req, res) => {
+  try {
+    await Project.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: 'Project deleted successfully' });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
 };

@@ -1,64 +1,42 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Card, Button, Form } from 'react-bootstrap';
 
-const ProjectForm = ({ onAddProject }) => {
-  const [projectName, setProjectName] = useState('');
+const ProjectForm = () => {
+  const [name, setName] = useState('');
   const [dueDate, setDueDate] = useState('');
   const [status, setStatus] = useState('active');
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const newProject = { name: projectName, dueDate, status };
-    
-    try {
-      await axios.post('http://localhost:4000/api/projects', newProject, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
-      onAddProject(); // Fetch updated project list
-    } catch (error) {
-      console.error("Error adding project:", error);
-    }
+    const newProject = { name, dueDate, status };
+
+    axios.post('http://localhost:5000/api/projects', newProject)
+      .then(response => alert('Project added successfully!'))
+      .catch(error => console.error(error));
   };
 
   return (
-    <Card className="shadow-sm p-4 mb-5">
+    <div className="form-container">
       <h3>Add New Project</h3>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="projectName">
-          <Form.Label>Project Name</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter project name"
-            value={projectName}
-            onChange={(e) => setProjectName(e.target.value)}
-            required
-          />
-        </Form.Group>
-        <Form.Group controlId="dueDate">
-          <Form.Label>Due Date</Form.Label>
-          <Form.Control
-            type="date"
-            value={dueDate}
-            onChange={(e) => setDueDate(e.target.value)}
-            required
-          />
-        </Form.Group>
-        <Form.Group controlId="status">
-          <Form.Label>Status</Form.Label>
-          <Form.Control
-            as="select"
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            required
-          >
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
-          </Form.Control>
-        </Form.Group>
-        <Button type="submit" variant="primary" className="mt-3 w-100">Add Project</Button>
-      </Form>
-    </Card>
+      <form onSubmit={handleSubmit}>
+        <input 
+          type="text" 
+          placeholder="Project Name" 
+          value={name} 
+          onChange={(e) => setName(e.target.value)} 
+        />
+        <input 
+          type="date" 
+          value={dueDate} 
+          onChange={(e) => setDueDate(e.target.value)} 
+        />
+        <select value={status} onChange={(e) => setStatus(e.target.value)}>
+          <option value="active">Active</option>
+          <option value="completed">Completed</option>
+        </select>
+        <button type="submit">Add Project</button>
+      </form>
+    </div>
   );
 };
 
