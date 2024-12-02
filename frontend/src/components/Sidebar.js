@@ -8,6 +8,7 @@ const Sidebar = () => {
       <ul>
         <li><Link to="/">Dashboard</Link></li>
         <li><Link to="/add-project">Add Project</Link></li>
+        <li><Link to="/payment">Payment</Link></li>
       </ul>
     </div>
   );

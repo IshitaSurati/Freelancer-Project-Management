@@ -1,6 +1,5 @@
 const Project = require('../models/projectModel');
 
-// Create Project
 exports.createProject = async (req, res) => {
   try {
     const newProject = new Project(req.body);
@@ -11,7 +10,6 @@ exports.createProject = async (req, res) => {
   }
 };
 
-// Get All Projects
 exports.getAllProjects = async (req, res) => {
   try {
     const projects = await Project.find();
@@ -21,7 +19,6 @@ exports.getAllProjects = async (req, res) => {
   }
 };
 
-// Update Project
 exports.updateProject = async (req, res) => {
   try {
     const updatedProject = await Project.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -31,7 +28,6 @@ exports.updateProject = async (req, res) => {
   }
 };
 
-// Delete Project
 exports.deleteProject = async (req, res) => {
   try {
     await Project.findByIdAndDelete(req.params.id);
